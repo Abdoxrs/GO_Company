@@ -16,6 +16,7 @@ async function GetAllEmps(req, res) {
     const apiBuild = new ApiFeatures(query, req.query)
     apiBuild.sort();
     apiBuild.pagginate();
+    apiBuild.projection();
     const employees = await apiBuild.dbQuery;
     res.status(200).json(employees);
   } catch (error) {

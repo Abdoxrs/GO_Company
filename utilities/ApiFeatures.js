@@ -16,8 +16,14 @@ module.exports = class ApiFeatures {
     if (this.requestQuery.sort){
       const sortBy = this.requestQuery.sort.split(",").join(" ");
       this.dbQuery = this.dbQuery.sort(sortBy);
-      console.log(sortBy);
-      return this; 
     }
+    return this;
+  }
+  projection(){
+    if (this.requestQuery.project){
+      const projectBy = this.requestQuery.project.split(",").join(" ");
+      this.dbQuery = this.dbQuery.select(projectBy);
+    }
+    return this;
   }
 };//projection
