@@ -27,3 +27,16 @@ async function GetDepartment(req, res) {
     res.status(404).json({ message: error.message });
   }
 }
+
+async function UpdateDepartment(req, res) {
+  try {
+    const ID = req.params.id;
+    const target = await Department.findByIdAndUpdate(ID, req.body, { 
+      new: true, 
+      runValidators: true
+    });;
+    res.status(200).json(target);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+}
