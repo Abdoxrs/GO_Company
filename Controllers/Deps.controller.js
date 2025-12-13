@@ -17,3 +17,13 @@ async function GetAllDepartments(req, res) {
     res.status(400).json({ message: error.message });
   }
 }
+
+async function GetDepartment(req, res) {
+  try {
+    const ID = req.params.id;
+    const matched = await Department.findById(ID);
+    res.status(200).json(matched);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+}
