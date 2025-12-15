@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const DepartmentSchema = new mongoose.Schema({
   number: {
@@ -16,7 +16,7 @@ const DepartmentSchema = new mongoose.Schema({
   }
 })
 
-exports.model = mongoose.model("Department", DepartmentSchema);
+module.exports = mongoose.model("Department", DepartmentSchema);
 /*
 ----------Project---------------
 number (number, unique, required)
