@@ -1,14 +1,14 @@
-const express = require('express');
-const {
+import express from 'express';
+import {
   CreateDepartment, 
   GetAllDepartments, 
-  GetDepartment, //id
-  UpdateDepartment, //id
+  GetDepartment,
+  UpdateDepartment,
   DeleteAllDepartments, 
-  DeleteDepartment//id
-} = require('../Controllers/Deps.controller');
+  DeleteDepartment
+} from '../Controllers/Deps.controller.js';
 
-const router = express();
+const router = express.Router();
 
 router.post('/',CreateDepartment);
 
@@ -20,4 +20,4 @@ router.patch('/:id',UpdateDepartment);
 router.delete('/',DeleteAllDepartments);
 router.delete('/:id',DeleteDepartment)
 
-module.exports = router;
+export default router;

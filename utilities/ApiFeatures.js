@@ -1,4 +1,4 @@
-module.exports = class ApiFeatures {
+export default class ApiFeatures {
   constructor(dbQuery, requestQuery) {
     this.dbQuery = dbQuery;
     this.requestQuery = requestQuery;
@@ -26,4 +26,4 @@ module.exports = class ApiFeatures {
     }
     return this;
   }
-};
+}

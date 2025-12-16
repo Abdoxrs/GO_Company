@@ -1,5 +1,5 @@
-const Employee = require('../Models/Emps.model');
-const ApiFeatures = require('../utilities/ApiFeatures')
+import Employee from '../Models/Emps.model.js';
+import ApiFeatures from '../utilities/ApiFeatures.js';
 
 async function createEmp(req, res) {
   try {
@@ -64,4 +64,4 @@ async function deleteEmp(req, res) {
   }
 }
 
-module.exports = { createEmp, GetAllEmps, GetEmp, updateEmp, deleteEmp };
+export { createEmp, GetAllEmps, GetEmp, updateEmp, deleteEmp };

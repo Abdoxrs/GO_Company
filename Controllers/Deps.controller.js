@@ -1,5 +1,5 @@
-const express = require('express');
-const Department = require('../Models/Deps.model');
+import Department from '../Models/Deps.model.js';
+
 
 async function CreateDepartment(req, res) {
   try {
@@ -68,11 +68,11 @@ async function DeleteDepartment(req, res) {
   }
 }
 
-module.exports = {
+export {
   CreateDepartment, 
   GetAllDepartments, 
   GetDepartment, 
   UpdateDepartment, 
   DeleteAllDepartments, 
   DeleteDepartment
-}
+};
