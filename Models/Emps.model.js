@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
-
-const SexEnum = ['M', 'F'];
+const SexEnum = ['Male', 'Female'];
 
 const employeeSchema = new mongoose.Schema({
   ssn: {
@@ -32,6 +31,7 @@ const employeeSchema = new mongoose.Schema({
     type: Number,
     required: true,
     min: 0,
+    default: 0
   },
 });
 

@@ -17,9 +17,3 @@ const DepartmentSchema = new mongoose.Schema({
 })
 
 export default mongoose.model("Department", DepartmentSchema);
-/*
-----------Project---------------
-number (number, unique, required)
-name (string, required)
-location (string)
-*/
