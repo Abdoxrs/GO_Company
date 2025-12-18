@@ -43,7 +43,7 @@ async function GetProject(req, res) {
 async function UpdateProject(req, res) {
   try {
     const ID = req.params.id;
-    const allowedFields = ['name', 'location'];
+    const allowedFields = ['number', 'name', 'location'];
     const updates = Object.keys(req.body);
     const isValidOperation = updates.every(update => allowedFields.includes(update));
     

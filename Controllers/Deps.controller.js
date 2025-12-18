@@ -16,7 +16,7 @@ async function CreateDepartment(req, res) {
 async function GetAllDepartments(req, res) {
   try {
     let query = Department.find({});
-    const queryBuld = new ApiFeatures(query, req.pody)
+    const queryBuld = new ApiFeatures(query, req.query);
     queryBuld.sort().paginate().projection();
     const allDepartments = await queryBuld.dbQuery;
     res.status(200).json(allDepartments);
