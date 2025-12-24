@@ -1,97 +1,95 @@
-import User from '../Models/Project.model.js';
-import ApiFeatures from '../utilities/ApiFeatures.js';
+const { ApiError } = require("../Utills/ApiError");
+const userService = require("../Services/users.service");
 
-async function CreateProject(req, res) {
-  try {
-    const project = await Project.create(req.body);
-    res.status(201).json(project);
-  } catch (error) {
-    if (error.code === 11000) {
-      return res.status(409).json({ message: 'Project number already exists' });
-    }
-    res.status(400).json({ message: error.message });
-  }
-}
-
-async function GetAllProjects(req, res) {
-  try {
-    const query = Project.find({});
-    const apiBuild = new ApiFeatures(query, req.query);
-    apiBuild.sort().paginate().projection();
-    const projects = await apiBuild.dbQuery;
-    res.status(200).json(projects);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-}
-
-async function GetProject(req, res) {
-  try {
-    const ID = req.params.id;
-    const project = await Project.findById(ID);
-    
-    if (!project) {
-      return res.status(404).json({ message: 'Project not found' });
-    }
-    
-    res.status(200).json(project);
-  } catch (error) {
-    res.status(404).json({ message: 'Project not found' });
-  }
-}
-
-async function UpdateProject(req, res) {
-  try {
-    const ID = req.params.id;
-    const allowedFields = ['number', 'name', 'location'];
-    const updates = Object.keys(req.body);
-    const isValidOperation = updates.every(update => allowedFields.includes(update));
-    
-    if (!isValidOperation) {
-      return res.status(400).json({ message: 'Invalid fields in request body' });
-    }
-
-    const project = await Project.findByIdAndUpdate(ID, req.body, { 
-      new: true, 
-      runValidators: true 
-    });
-    
-    if (!project) {
-      return res.status(404).json({ message: 'Project not found' });
-    }
-    
-    res.status(200).json(project);
-  } catch (error) {
-    if (error.code === 11000) {
-      return res.status(409).json({ message: 'Project number already exists' });
-    }
-    res.status(400).json({ message: error.message });
-  }
-}
-
-async function DeleteProject(req, res) {
-  try {
-    const ID = req.params.id;
-    const project = await Project.findByIdAndDelete(ID);
-    
-    if (!project) {
-      return res.status(404).json({ message: 'Project not found' });
-    }
-    
-    res.status(200).json({ 
-      data: { deleted: true },
-      message: 'Project deleted successfully', 
-      project 
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-}
-
-export { 
-  CreateUser, 
-  GetAllUsers, 
-  GetUser,
-  UpdateUser,
-  DeleteUser 
+exports.createUser = async (req, res, next) => {
+  const employee = await userService.createUser(req.body);
+  employee.password = undefined;
+  res.status(201).json({
+    status: "success",
+    message: "employee created successfully",
+    data: employee,
+  });
 };
+
+exports.loginUser = async (req, res, next) => {
+  const token = await userService.loginUser(req.body);
+  res.status(200).json({
+    status: "success",
+    message: "User Logged in successfully",
+    data: token,
+  });
+};
+
+exports.getUserById = async (req, res) => {
+  console.log("HEEEELOOO");
+  const user = await userService.getUserById(req.params.id);
+  res.status(200).json({
+    status: "success",
+    message: "user data retireived successfully",
+    data: user,
+  });
+};
+
+// exports.getAllEmployees = async (req, res, next) => {
+//   const employees = await employeeService.getEmployees(req.query);
+//   res.status(200).json({
+//     status: "success",
+//     message: "employees retrieved successfully",
+//     data: employees,
+//   });
+// };
+
+// exports.getEmployee = async (req, res, next) => {
+//   try {
+//     const employee = await employeeService.getEmployeeById(req.params.id);
+//     if (!employee) {
+//       throw new ApiError("Employee not found", 404);
+//     }
+//     res.status(200).json({
+//       status: "success",
+//       message: "employee data retrieved successfully",
+//       data: employee,
+//     });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
+
+// exports.updateEmployee = async (req, res, next) => {
+//   try {
+//     const employee = await employeeService.updateEmployeeById(
+//       req.params.id,
+//       req.body
+//     );
+//     if (!employee) {
+//       throw new ApiError("Employee not found", 404);
+//     }
+//     res.status(200).json({
+//       status: "success",
+//       message: "employee updated successfully",
+//       data: employee,
+//     });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
+
+// exports.deleteAllEmployees = async (req, res, next) => {
+//   const result = await employeeService.deleteAllEmployees();
+//   res.status(200).json({
+//     status: "success",
+//     message: "employees deleted successfully",
+//     data: { deletedCount: result.deletedCount },
+//   });
+// };
+
+// exports.deleteEmployee = async (req, res, next) => {
+//   const employee = await employeeService.deleteEmployeeById(req.params.id);
+//   if (!employee) {
+//     throw new ApiError("Employee not found", 404);
+//   }
+//   res.status(200).json({
+//     status: "success",
+//     message: "employee deleted successfully",
+//   });
+// };

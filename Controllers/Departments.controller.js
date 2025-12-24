@@ -1,49 +1,40 @@
-import Dependent from '../Models/Dependent.model.js';
+import Department from '../Models/departments.model.js';
 import ApiFeatures from '../utilities/ApiFeatures.js';
 
-async function CreateDependent(req, res) {
-  try {
-    const dependent = await Dependent.create(req.body);
-    res.status(201).json(dependent);
-  } catch (error) {
-    if (error.code === 11000) {
-      return res.status(409).json({ message: 'Dependent with this name already exists for this employee' });
-    }
-    res.status(400).json({ message: error.message });
-  }
+async function CreateDepartment(req, res) {
+    const createdDep = await Department.create(req.body);
+    res.status(201).json(createdDep);
 }
 
-async function GetAllDependents(req, res) {
+async function GetAllDepartments(req, res) {
   try {
-    const query = Dependent.find({}).populate('employeeId', 'ssn name');
-    const apiBuild = new ApiFeatures(query, req.query);
-    apiBuild.sort().paginate().projection();
-    const dependents = await apiBuild.dbQuery;
-    res.status(200).json(dependents);
+    let query = Department.find({});
+    const queryBuld = new ApiFeatures(query, req.query);
+    queryBuld.sort().paginate().projection();
+    const allDepartments = await queryBuld.dbQuery;
+    res.status(200).json(allDepartments);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 }
 
-async function GetDependent(req, res) {
+async function GetDepartment(req, res) {
   try {
     const ID = req.params.id;
-    const dependent = await Dependent.findById(ID).populate('employeeId', 'ssn name');
-    
-    if (!dependent) {
-      return res.status(404).json({ message: 'Dependent not found' });
+    const matched = await Department.findById(ID);
+    if (!matched) {
+      return res.status(404).json({ message: 'Department not found' });
     }
-    
-    res.status(200).json(dependent);
+    res.status(200).json(matched);
   } catch (error) {
-    res.status(404).json({ message: 'Dependent not found' });
+    res.status(404).json({ message: 'Department not found' });
   }
 }
 
-async function UpdateDependent(req, res) {
+async function UpdateDepartment(req, res) {
   try {
     const ID = req.params.id;
-    const allowedFields = ['employeeId', 'name', 'sex', 'birthDate', 'relationship'];
+    const allowedFields = ['number', 'name', 'locations'];
     const updates = Object.keys(req.body);
     const isValidOperation = updates.every(update => allowedFields.includes(update));
     
@@ -51,47 +42,48 @@ async function UpdateDependent(req, res) {
       return res.status(400).json({ message: 'Invalid fields in request body' });
     }
 
-    const dependent = await Dependent.findByIdAndUpdate(ID, req.body, { 
+    const target = await Department.findByIdAndUpdate(ID, req.body, { 
       new: true, 
-      runValidators: true 
-    }).populate('employeeId', 'ssn name');
+      runValidators: true
+    });
     
-    if (!dependent) {
-      return res.status(404).json({ message: 'Dependent not found' });
+    if (!target) {
+      return res.status(404).json({ message: 'Department not found' });
     }
     
-    res.status(200).json(dependent);
+    res.status(200).json(target);
   } catch (error) {
     if (error.code === 11000) {
-      return res.status(409).json({ message: 'Dependent with this name already exists for this employee' });
+      return res.status(409).json({ message: 'Department number already exists' });
     }
     res.status(400).json({ message: error.message });
   }
 }
 
-async function DeleteDependent(req, res) {
+async function DeleteDepartment(req, res) {
   try {
     const ID = req.params.id;
-    const dependent = await Dependent.findByIdAndDelete(ID);
+    const deletedOne = await Department.findByIdAndDelete(ID);
     
-    if (!dependent) {
-      return res.status(404).json({ message: 'Dependent not found' });
+    if (!deletedOne) {
+      return res.status(404).json({ message: 'Department not found' });
     }
     
     res.status(200).json({ 
       data: { deleted: true },
-      message: 'Dependent deleted successfully', 
-      dependent 
+      message: 'Department deleted successfully', 
+      department: deletedOne 
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 }
 
-export { 
-  CreateDependent, 
-  GetAllDependents, 
-  GetDependent, 
-  UpdateDependent, 
-  DeleteDependent 
+
+export {
+  CreateDepartment, 
+  GetAllDepartments, 
+  GetDepartment, 
+  UpdateDepartment, 
+  DeleteDepartment
 };
