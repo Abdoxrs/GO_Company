@@ -5,6 +5,7 @@ export default (error, req, res, next) => {
       message: error.message,
     });
   } else {
+    console.log(error);
     res.status(500).json({
       status: 'error',
       message: 'Internal Server Error',

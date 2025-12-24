@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import Employee from '../Models/Emps.model.js';
+import Employee from '../Models/employees.model.js';
 import ApiFeatures from '../utilities/ApiFeatures.js';
 
 async function createEmp(req, res) {

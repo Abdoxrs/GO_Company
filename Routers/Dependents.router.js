@@ -5,7 +5,7 @@ import {
   GetDependent,
   UpdateDependent,
   DeleteDependent
-} from '../Controllers/Departments.controller.js';
+} from '../Controllers/dependents.controller.js';
 
 const router = express.Router();
 

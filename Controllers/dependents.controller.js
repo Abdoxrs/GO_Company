@@ -1,5 +1,5 @@
-import ApiError from '../utilities/ApiError'
-
+import ApiError from '../utilities/ApiError.js'
+import Dependent from '../Models/dependents.model.js'
 async function CreateDependent(req, res, next) {
     const dependent = await Dependent.create(req.body);
     res.status(201).json({

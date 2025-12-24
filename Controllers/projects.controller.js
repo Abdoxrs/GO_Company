@@ -1,4 +1,4 @@
-import Project from '../Models/Project.model.js';
+import Project from '../Models/projects.model.js';
 import ApiFeatures from '../utilities/ApiFeatures.js';
 
 async function CreateProject(req, res) {
