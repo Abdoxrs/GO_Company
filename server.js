@@ -4,7 +4,7 @@ import connectDB from "./Config/DB.js";
 const PORT = process.env.PORT || 3000;
 
 connectDB().then(() => {
-    console.log('Connected to MongoDB ✅');
+    console.log(' Connected to MongoDB ✅');
     app.listen(PORT, () => {
       console.log(`App is running on port ${PORT}`);
     });
