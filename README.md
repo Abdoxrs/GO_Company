@@ -281,3 +281,4 @@ Feel free to submit issues and enhancement requests!
 ---
 
 **Note**: Make sure MongoDB is running before starting the application.
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/Abdoxrs/GO_Company?utm_source=oss&utm_medium=github&utm_campaign=Abdoxrs%2FGO_Company&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
