@@ -1,2 +1,6 @@
-/Views
-/node_modules
+Test
+Views
+node_modules
+.env
+.env.local
+.env.*.local

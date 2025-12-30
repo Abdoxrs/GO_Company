@@ -1,4 +1,5 @@
 import ApiError from '../utilities/ApiError.js';
+import asyncHandler from '../utilities/asyncHandler.js';  // ✅ Import the wrapper
 import {
   createEmployee,
   getEmployees,
@@ -7,33 +8,34 @@ import {
   deleteEmployeeById
 } from '../Services/employees.service.js';
 
-async function createEmp(req, res, next) {
+// ✅ Wrap each controller function with asyncHandler
+const createEmp = asyncHandler(async (req, res, next) => {
   const employee = await createEmployee(req.body);
   res.status(201).json({
     status: 'success',
     message: 'Employee created successfully',
     data: employee
   });
-}
+});
 
-async function GetAllEmps(req, res, next) {
+const GetAllEmps = asyncHandler(async (req, res, next) => {
   const allEmployees = await getEmployees(req.query);
   res.status(200).json(allEmployees);
-}
+});
 
-async function GetEmp(req, res, next) {
+const GetEmp = asyncHandler(async (req, res, next) => {
   const matched = await getEmployeeById(req.params.id);
   if (!matched) throw new ApiError('Employee not found', 404);
   res.status(200).json(matched);
-}
+});
 
-async function updateEmp(req, res, next) {
+const updateEmp = asyncHandler(async (req, res, next) => {
   const target = await updateEmployee(req.params.id, req.body);
   if (!target) throw new ApiError('Employee not found', 404);
   res.status(200).json(target);
-}
+});
 
-async function deleteEmp(req, res, next) {
+const deleteEmp = asyncHandler(async (req, res, next) => {
   const deletedOne = await deleteEmployeeById(req.params.id);
   if (!deletedOne) throw new ApiError('Employee not found', 404);
   res.status(200).json({
@@ -41,7 +43,7 @@ async function deleteEmp(req, res, next) {
     message: 'Employee deleted successfully',
     employee: deletedOne
   });
-}
+});
 
 export {
   createEmp,
