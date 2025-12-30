@@ -5,7 +5,7 @@ import {
   FindUser,
   UpdateUserProfile,
   ChangePassword
-} from '../Controllers/users.controller.js';
+} from '../Controllers/Users.controller.js';
 
 const router = express.Router();
 
