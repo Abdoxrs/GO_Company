@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+
 const SexEnum = ['Male', 'Female'];
 
 const employeeSchema = new mongoose.Schema({
@@ -7,6 +8,7 @@ const employeeSchema = new mongoose.Schema({
     required: true,
     unique: true,
     trim: true,
+    index: true  // ✅ Index for faster lookups
   },
   name: {
     type: {
@@ -33,6 +35,13 @@ const employeeSchema = new mongoose.Schema({
     min: 0,
     default: 0
   },
+}, {
+  timestamps: true  // ✅ Add timestamps for better tracking
+});
+
+// ✅ Virtual for full name
+employeeSchema.virtual('fullName').get(function() {
+  return `${this.name.fname} ${this.name.minit ? this.name.minit + '. ' : ''}${this.name.lname}`;
 });
 
 export default mongoose.model('Employee', employeeSchema);

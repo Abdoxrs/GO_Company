@@ -14,7 +14,6 @@ const LoginUser = async (data) => {
     throw new ApiError("Wrong email or password, please try again!", 400)
   }
 
-  // ✅ Use the instance method
   const isPasswordCorrect = await userDoc.comparePassword(data.password);
   
   if (!isPasswordCorrect) {
@@ -45,7 +44,7 @@ const updateUserPassword = async (userId, currentPassword, newPassword, newPassw
   
   // Verify current password
   const isPasswordCorrect = await user.comparePassword(currentPassword);
-  if (!isPasswordCorrect) {
+  if (!isPasswordCorrect){
     throw new ApiError('Current password is incorrect', 401);
   }
   

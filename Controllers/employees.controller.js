@@ -1,14 +1,15 @@
 import ApiError from '../utilities/ApiError.js';
-import asyncHandler from '../utilities/asyncHandler.js';  // ✅ Import the wrapper
+import asyncHandler from '../utilities/asyncHandler.js';
 import {
   createEmployee,
   getEmployees,
   getEmployeeById,
   updateEmployee,
-  deleteEmployeeById
+  deleteEmployeeById,
+  hasEmployeeDependents
 } from '../Services/employees.service.js';
+import { deleteDependentsByEmployeeId } from '../Services/dependents.service.js';
 
-// ✅ Wrap each controller function with asyncHandler
 const createEmp = asyncHandler(async (req, res, next) => {
   const employee = await createEmployee(req.body);
   res.status(201).json({
@@ -36,13 +37,41 @@ const updateEmp = asyncHandler(async (req, res, next) => {
 });
 
 const deleteEmp = asyncHandler(async (req, res, next) => {
-  const deletedOne = await deleteEmployeeById(req.params.id);
-  if (!deletedOne) throw new ApiError('Employee not found', 404);
-  res.status(200).json({
-    status: 'success',
-    message: 'Employee deleted successfully',
-    employee: deletedOne
-  });
+  const employee = await getEmployeeById(req.params.id);
+  if (!employee) throw new ApiError('Employee not found', 404);
+  
+  // ✅ Check query parameter for cascade behavior
+  const cascade = req.query.cascade === 'true';
+  
+  if (cascade) {
+    // Delete employee and all their dependents
+    await deleteDependentsByEmployeeId(req.params.id);
+    await deleteEmployeeById(req.params.id);
+    
+    res.status(200).json({
+      status: 'success',
+      message: 'Employee and their dependents deleted successfully',
+      employee
+    });
+  } else {
+    // Check if employee has dependents
+    const hasDependents = await hasEmployeeDependents(req.params.id);
+    
+    if (hasDependents) {
+      throw new ApiError(
+        'Cannot delete employee with dependents. Use ?cascade=true to delete employee and dependents together.',
+        409
+      );
+    }
+    
+    await deleteEmployeeById(req.params.id);
+    
+    res.status(200).json({
+      status: 'success',
+      message: 'Employee deleted successfully',
+      employee
+    });
+  }
 });
 
 export {

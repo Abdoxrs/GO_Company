@@ -19,10 +19,18 @@ const updateEmployee = (id, updated) => {
 
 const deleteEmployeeById = (id) => Employee.findByIdAndDelete(id);
 
+// ✅ New: Check if employee has dependents
+const hasEmployeeDependents = async (employeeId) => {
+  const Dependent = (await import('../Models/dependents.model.js')).default;
+  const count = await Dependent.countDocuments({ employeeId });
+  return count > 0;
+};
+
 export {
   createEmployee,
   getEmployees,
   getEmployeeById,
   updateEmployee,
-  deleteEmployeeById
+  deleteEmployeeById,
+  hasEmployeeDependents
 };
