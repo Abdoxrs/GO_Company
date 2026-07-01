@@ -1,122 +1,106 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+
+// Auth Pages
+import LoginPage from './pages/auth/LoginPage';
+import SignupPage from './pages/auth/SignupPage';
+import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
+
+// Dashboard
+import DashboardPage from './pages/dashboard/DashboardPage';
+
+// Employees
+import EmployeesPage from './pages/employees/EmployeesPage';
+import EmployeeDetailPage from './pages/employees/EmployeeDetailPage';
+import EmployeeFormPage from './pages/employees/EmployeeFormPage';
+
+// Departments
+import DepartmentsPage from './pages/departments/DepartmentsPage';
+import DepartmentDetailPage from './pages/departments/DepartmentDetailPage';
+import DepartmentFormPage from './pages/departments/DepartmentFormPage';
+
+// Projects
+import ProjectsPage from './pages/projects/ProjectsPage';
+import ProjectDetailPage from './pages/projects/ProjectDetailPage';
+import ProjectFormPage from './pages/projects/ProjectFormPage';
+
+// Assignments
+import AssignmentsPage from './pages/assignments/AssignmentsPage';
+import AssignmentFormPage from './pages/assignments/AssignmentFormPage';
+
+// Dependents
+import DependentsPage from './pages/dependents/DependentsPage';
+import DependentFormPage from './pages/dependents/DependentFormPage';
+
+// Reports
+import ReportsPage from './pages/reports/ReportsPage';
+
+// Profile
+import ProfilePage from './pages/profile/ProfilePage';
+
+// Admin
+import UsersPage from './pages/admin/UsersPage';
+import IntegrityPage from './pages/admin/IntegrityPage';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
-      <div className="ticks"></div>
+          {/* Protected Routes */}
+          <Route path="/" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+          {/* Employees */}
+          <Route path="/employees" element={<ProtectedRoute><EmployeesPage /></ProtectedRoute>} />
+          <Route path="/employees/new" element={<ProtectedRoute requireAdmin><EmployeeFormPage /></ProtectedRoute>} />
+          <Route path="/employees/:id" element={<ProtectedRoute><EmployeeDetailPage /></ProtectedRoute>} />
+          <Route path="/employees/:id/edit" element={<ProtectedRoute requireAdmin><EmployeeFormPage /></ProtectedRoute>} />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+          {/* Departments */}
+          <Route path="/departments" element={<ProtectedRoute><DepartmentsPage /></ProtectedRoute>} />
+          <Route path="/departments/new" element={<ProtectedRoute requireAdmin><DepartmentFormPage /></ProtectedRoute>} />
+          <Route path="/departments/:id" element={<ProtectedRoute><DepartmentDetailPage /></ProtectedRoute>} />
+          <Route path="/departments/:id/edit" element={<ProtectedRoute requireAdmin><DepartmentFormPage /></ProtectedRoute>} />
+
+          {/* Projects */}
+          <Route path="/projects" element={<ProtectedRoute><ProjectsPage /></ProtectedRoute>} />
+          <Route path="/projects/new" element={<ProtectedRoute requireAdmin><ProjectFormPage /></ProtectedRoute>} />
+          <Route path="/projects/:id" element={<ProtectedRoute><ProjectDetailPage /></ProtectedRoute>} />
+          <Route path="/projects/:id/edit" element={<ProtectedRoute requireAdmin><ProjectFormPage /></ProtectedRoute>} />
+
+          {/* Assignments */}
+          <Route path="/assignments" element={<ProtectedRoute><AssignmentsPage /></ProtectedRoute>} />
+          <Route path="/assignments/new" element={<ProtectedRoute requireAdmin><AssignmentFormPage /></ProtectedRoute>} />
+          <Route path="/assignments/:id/edit" element={<ProtectedRoute requireAdmin><AssignmentFormPage /></ProtectedRoute>} />
+
+          {/* Dependents */}
+          <Route path="/dependents" element={<ProtectedRoute><DependentsPage /></ProtectedRoute>} />
+          <Route path="/dependents/new" element={<ProtectedRoute requireAdmin><DependentFormPage /></ProtectedRoute>} />
+          <Route path="/dependents/:id/edit" element={<ProtectedRoute requireAdmin><DependentFormPage /></ProtectedRoute>} />
+
+          {/* Reports */}
+          <Route path="/reports" element={<ProtectedRoute><ReportsPage /></ProtectedRoute>} />
+
+          {/* Profile */}
+          <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+
+          {/* Admin */}
+          <Route path="/admin/users" element={<ProtectedRoute requireAdmin><UsersPage /></ProtectedRoute>} />
+          <Route path="/admin/integrity" element={<ProtectedRoute requireAdmin><IntegrityPage /></ProtectedRoute>} />
+
+          {/* Fallback */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
